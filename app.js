@@ -73,43 +73,37 @@ const refs = {
 }
 
 
+
 const jsElements = galleryItems.map(({ preview, original, description }) => {
+
   return `<li class="gallery__item">
- <a class="gallery__link" href="${original}">
- <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"/>
-      </a>
-      </li>`
+  <a class="gallery__link" href="${original}">
+  <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"/>
+       </a>
+       </li>`
 }
-).join('')
+).join('');
+console.log(jsElements);
 
-
-refs.jsGallery.insertAdjacentHTML('beforeend', jsElements)
-
-
+refs.jsGallery.insertAdjacentHTML('beforeend', jsElements);
 
 
 refs.jsGallery.addEventListener('click', showImages)
 
+
 function showImages(evt) {
   evt.preventDefault();
-  
-  refs.jsLightBox.classList.add('is-open');
+  refs.jsLightBox.classList.add('is-open')
   refs.jsLightBoxImage.src = evt.target.dataset.source;
   refs.jsLightBoxImage.alt = evt.target.alt;
 }
 
 const enableImages = () => {
-  refs.jsLightBox.classList.remove('is-open')
+  refs.jsLightBox.classList.remove('is-open');
   refs.jsLightBoxImage.src = '';
   refs.jsLightBoxImage.alt = '';
 }
 
-refs.jsLightBoxBtn.addEventListener('click', e => {
-  const target = e.target;
-  if (target.classList.contains('lightbox__button')) {
-    enableImages();
-  }
-})
 
 
-
+refs.jsLightBoxBtn.addEventListener('click', enableImages)
