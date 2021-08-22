@@ -63,38 +63,53 @@ const galleryItems = [
     description: 'Lighthouse Coast Sea',
   },
 ];
-
-
-
-const jsGallery = document.querySelector('#js-gallery')
-
-const galleryMarkup = imgMarkup(galleryItems)
-const galleryEl = 5;
-
-console.log(imgMarkup(galleryItems));
-jsGallery.insertAdjacentHTML('beforeend', galleryMarkup)
-
-
-function imgMarkup(items) {
-    return items.map(({preview, original, description}) => {
-      return `
-        <li class="gallery__item">
-        <a
-       class="gallery__link"
-       href="${original}"
-       >
-       <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
-       />
-      </a>
-     </li>`
-    }).join('');
+const refs = {
+  jsGallery: document.querySelector('#js-gallery'),
+  jsLightBox: document.querySelector('.js-lightbox'),
+  jsLightBoxOverlay: document.querySelector('.lightbox__overlay'),
+  jsLightBoxContent: document.querySelector('.lightbox__content'),
+  jsLightBoxImage: document.querySelector('.lightbox__image'),
+  jsLightBoxBtn: document.querySelector('.lightbox__button'),
 }
 
 
+const jsElements = galleryItems.map(({ preview, original, description }) => {
+  return `<li class="gallery__item">
+ <a class="gallery__link" href="${original}">
+ <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"/>
+      </a>
+      </li>`
+}
+).join('')
 
 
-//!
+refs.jsGallery.insertAdjacentHTML('beforeend', jsElements)
+
+
+
+
+refs.jsGallery.addEventListener('click', showImages)
+
+function showImages(evt) {
+  evt.preventDefault();
+  
+  refs.jsLightBox.classList.add('is-open');
+  refs.jsLightBoxImage.src = evt.target.dataset.source;
+  refs.jsLightBoxImage.alt = evt.target.alt;
+}
+
+const enableImages = () => {
+  refs.jsLightBox.classList.remove('is-open')
+  refs.jsLightBoxImage.src = '';
+  refs.jsLightBoxImage.alt = '';
+}
+
+refs.jsLightBoxBtn.addEventListener('click', e => {
+  const target = e.target;
+  if (target.classList.contains('lightbox__button')) {
+    enableImages();
+  }
+})
+
+
+
