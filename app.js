@@ -63,47 +63,97 @@ const galleryItems = [
     description: 'Lighthouse Coast Sea',
   },
 ];
+
+
 const refs = {
-  jsGallery: document.querySelector('#js-gallery'),
-  jsLightBox: document.querySelector('.js-lightbox'),
-  jsLightBoxOverlay: document.querySelector('.lightbox__overlay'),
-  jsLightBoxContent: document.querySelector('.lightbox__content'),
-  jsLightBoxImage: document.querySelector('.lightbox__image'),
-  jsLightBoxBtn: document.querySelector('.lightbox__button'),
+jsGalleryList: document.querySelector('.js-gallery'),
+jsLightbox: document.querySelector('.js-lightbox'),
+lightboxOverlay:document.querySelector('.lightbox__overlay'),
+lightboxImage:document.querySelector('.lightbox__image'),
+lightboxButton: document.querySelector('.lightbox__button'),
+galleryImage: document.querySelector('.gallery__image'),
+}
+
+refs.jsGalleryList.innerHTML =
+  galleryItems.map(({ preview, original, description }) =>
+   
+  `<li class="gallery__item">
+ <a class="gallery__link" href="${original}">
+ <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"/>
+      </a>
+      </li>`
+ )
+ .join("")
+
+
+
+refs.jsGalleryList.addEventListener('click', onListClick)
+
+function onListClick(e) {
+  if (!e.target.classList.contains('gallery__image')) {
+    return;
+  }
+  e.preventDefault();
+
+  refs.jsLightbox.classList.add('is-open');
+  refs.lightboxImage.src = e.target.dataset.source;
+  refs.lightboxImage.alt = e.target.alt;
+  refs.lightboxImage.classList.add('is-shown')
+
+ window.addEventListener('keydown', keyClickListener);
+}
+
+
+refs.jsLightbox.addEventListener('click', e => {
+  const target = e.target;
+  if (target.classList.contains('lightbox__button') || target.matches('.lightbox__overlay') ) {
+    cartModalClose();
+  }
+  window.removeEventListener('keydown', keyClickListener);
+})
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape'|| e.key ==='Esc') {
+    cartModalClose()
+  }
+})
+
+
+const cartModalClose = () => {
+  refs.jsLightbox.classList.remove('is-open');
+  refs.lightboxImage.classList.remove('is-shown')
+  refs.lightboxImage.src = "";
+  refs.lightboxImage.alt = "";
 }
 
 
 
-const jsElements = galleryItems.map(({ preview, original, description }) => {
 
-  return `<li class="gallery__item">
-  <a class="gallery__link" href="${original}">
-  <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"/>
-       </a>
-       </li>`
+let arr = [];
+let images = document.querySelectorAll('.gallery__image');
+const originalSrc = images.forEach(img => arr.push(img.dataset.source));
+
+
+
+function keyClickListener(e) {
+const isShown = document.querySelector('.is-shown')
+const currentSrc = isShown.src;
+  
+  let i = arr.indexOf(currentSrc);
+  if (e.key === 'ArrowRight') {
+  console.log('ArrowRight')
+      if (arr.length - 1 > i) {
+      i += 1;
+        refs.lightboxImage.src = arr[i];
+
+    }
+    }
+    else if (e.key === 'ArrowLeft'){
+  console.log('ArrowLeft')
+       if ( i > 0) {
+      i -= 1;
+         refs.lightboxImage.src = arr[i];
+         
+    }
 }
-).join('');
-console.log(jsElements);
-
-refs.jsGallery.insertAdjacentHTML('beforeend', jsElements);
-
-
-refs.jsGallery.addEventListener('click', showImages)
-
-
-function showImages(evt) {
-  evt.preventDefault();
-  refs.jsLightBox.classList.add('is-open')
-  refs.jsLightBoxImage.src = evt.target.dataset.source;
-  refs.jsLightBoxImage.alt = evt.target.alt;
 }
-
-const enableImages = () => {
-  refs.jsLightBox.classList.remove('is-open');
-  refs.jsLightBoxImage.src = '';
-  refs.jsLightBoxImage.alt = '';
-}
-
-
-
-refs.jsLightBoxBtn.addEventListener('click', enableImages)
