@@ -112,11 +112,6 @@ refs.jsLightbox.addEventListener('click', e => {
   window.removeEventListener('keydown', keyClickListener);
 })
 
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape'|| e.key ==='Esc') {
-    cartModalClose()
-  }
-})
 
 
 const cartModalClose = () => {
@@ -128,32 +123,3 @@ const cartModalClose = () => {
 
 
 
-
-let arr = [];
-let images = document.querySelectorAll('.gallery__image');
-const originalSrc = images.forEach(img => arr.push(img.dataset.source));
-
-
-
-function keyClickListener(e) {
-const isShown = document.querySelector('.is-shown')
-const currentSrc = isShown.src;
-  
-  let i = arr.indexOf(currentSrc);
-  if (e.key === 'ArrowRight') {
-  console.log('ArrowRight')
-      if (arr.length - 1 > i) {
-      i += 1;
-        refs.lightboxImage.src = arr[i];
-
-    }
-    }
-    else if (e.key === 'ArrowLeft'){
-  console.log('ArrowLeft')
-       if ( i > 0) {
-      i -= 1;
-         refs.lightboxImage.src = arr[i];
-         
-    }
-}
-}
